@@ -284,11 +284,33 @@
       }
     </script>
 
-    {%- if customer.metafields.sparklayer.authentication -%}
-      <!-- Start of SparkLayer core script-->
-      {%- # SPARKLAYER CONFIG AUTO REPLACEMENT -%}
-      <!-- End of SparkLayer core script-->
 
+
+{%- if customer.metafields.sparklayer.authentication -%}
+<!-- Anything inside here only shows for logged in customers-->
+<!-- Start of SparkLayer core script-->
+<script>
+window.sparkOptions = {
+  siteId: "newfive",
+  sparkDomain: "test.app.sparklayer.io",
+  platform: "shopify",
+  rootUrl: {{ routes.root_url | json }},
+  language: {{ request.locale.iso_code | json }},
+  accountRedirect: {
+    urlRegex: /\/account/g,
+    goTo: "/index", // page to redirect logged in users to
+  },
+  auth: {
+    user: {{ customer.email | json }},
+    token: {{ customer.metafields.sparklayer.authentication | json }},
+  },
+};
+
+<script async src="https://sparkcdn.io/sparkjs/newfive/test"></script>
+<!-- End of SparkLayer core script-->
+{%- endif -%}
+      <!-- End of SparkLayer core script-->
+    {%- if customer.metafields.sparklayer.authentication -%}
       <!-- SparkLayer Sample CSS Code -->
 
       <style type="text/css">
